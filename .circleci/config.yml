@@ -23,8 +23,7 @@ jobs:
             mv /tmp/docker/* /usr/bin
       - run:
           name: Docker command docker # Download and install docker client
-          command: |
-            which docker
+          command: sbt show dockerApiVersion
       - checkout # Checkout from origin branch
       - run:
           name: Clean # Clean project
