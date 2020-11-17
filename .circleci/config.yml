@@ -14,6 +14,9 @@ jobs:
             dpkg -i sbt-$SBT_VERSION.deb
             rm sbt-$SBT_VERSION.deb
       - checkout # Checkout from origin branch
+      - setup_remote_docker: # Setup remote docker environment
+            version: 19.03.13
+            docker_layer_caching: true
       - run:
           name: Clean # Clean project
           command: sbt clean
