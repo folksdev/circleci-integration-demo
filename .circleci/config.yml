@@ -1,22 +1,28 @@
-version: 2.1
-
+version: 2.1 # CircleCI api version
 jobs:
   build:
     docker:
       - image: openjdk:11
+    environment:
+      - SBT_VERSION: 1.4.2
     steps:
       - run:
-          name: Get sbt
+          name: Get sbt binary # Download and install sbt binary
           command: |
             apt update && apt install -y curl
-            curl -L -o sbt-1.4.2.deb https://dl.bintray.com/sbt/debian/sbt-1.4.2.deb
-            dpkg -i sbt-1.4.2.deb
-            rm sbt-1.4.2.deb
-      - checkout
+            curl -L -o sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb
+            dpkg -i sbt-$SBT_VERSION.deb
+            rm sbt-$SBT_VERSION.deb
+      - checkout # Checkout from origin branch
       - run:
-          name: Clean Build
-          command: sbt clean compile
-workflows:
-  build-workflow:
-    jobs:
-      - build
+          name: Clean # Clean project
+          command: sbt clean
+      - run:
+          name: Compile # Build project
+          command: sbt compile
+      - run:
+          name: Test # Run tests
+          command: sbt test
+      - run:
+          name: Publish # Publish docker container
+          command: sbt docker:publish
