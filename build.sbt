@@ -1,4 +1,7 @@
+import com.typesafe.sbt.packager.docker.DockerApiVersion
+
 name := "circleci-integration-demo"
+
 
 version := "0.1"
 
@@ -15,5 +18,6 @@ lazy val `circleci-integration-demo` = project
 
 lazy val dockerSettings = Seq(
   dockerRepository := Option("folksdev"),
-  version in Docker := version.value
+  version in Docker := version.value ,
+  dockerApiVersion := Some(DockerApiVersion(1, 40))
 )
