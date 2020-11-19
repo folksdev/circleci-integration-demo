@@ -13,11 +13,10 @@ lazy val `circleci-integration-demo` = project
     JavaAppPackaging,
     DockerPlugin
   )
-  .settings(
-  )
+  .settings(dockerSettings)
 
 lazy val dockerSettings = Seq(
   dockerRepository := Option("folksdev"),
-  version in Docker := version.value ,
-  dockerApiVersion := Some(DockerApiVersion(1, 40))
+  version in Docker := version.value,
+  dockerBaseImage := "openjdk:11"
 )

@@ -6,6 +6,7 @@ jobs:
     environment:
       - SBT_VERSION: 1.4.2
     steps:
+      - checkout # Checkout from origin branch
       - run:
           name: Install sbt # Download and install sbt binary
           command: |
@@ -13,9 +14,17 @@ jobs:
             curl -L -o sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb
             dpkg -i sbt-$SBT_VERSION.deb
             rm sbt-$SBT_VERSION.deb
-      - setup_remote_docker: # Setup remote docker environment
-          version: 19.03.13
-      - checkout # Checkout from origin branch
+      - run:
+          name: Install docker # Download and install docker client
+          command: |
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sh get-docker.sh
+      - setup_remote_docker
+      - run:
+          name: Docker login
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker version --format '{{.Server.APIVersion}}'
       - run:
           name: Clean # Clean project
           command: sbt clean
